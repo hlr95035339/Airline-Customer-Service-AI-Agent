@@ -26,4 +26,5 @@ A[Frontend UI] --> B[FastAPI /chat Endpoint]
 B --> C[Sentiment Analysis]
 B --> D[RAG Knowledge Retrieval]
 B --> E[High EQ Reply Generator]
-D --> F[Policy Documents (FAISS Index)]
+D --> F[Policy Documents - FAISS Index]
+```
