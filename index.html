@@ -1,0 +1,88 @@
+<!doctype html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Airline Customer Service AI Agent</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+  <style>
+    :root { color-scheme: light; font-family: system-ui, "Microsoft JhengHei", sans-serif; }
+    body { margin: 0; background: #eef3f6; color: #17212b; }
+    main { max-width: 760px; margin: 48px auto; padding: 0 20px; }
+    .panel { background: white; border: 1px solid #d8e1e6; border-radius: 12px; padding: 28px; box-shadow: 0 10px 30px #18324712; }
+    h1 { margin-top: 0; font-size: 28px; }
+    label { display: block; margin-bottom: 8px; font-weight: 700; }
+    textarea { box-sizing: border-box; width: 100%; min-height: 130px; resize: vertical; padding: 12px; border: 1px solid #b9c7cf; border-radius: 8px; font: inherit; }
+    button { margin-top: 14px; padding: 11px 20px; border: 0; border-radius: 8px; background: #126782; color: white; font: inherit; font-weight: 700; cursor: pointer; }
+    button:disabled { opacity: .6; cursor: wait; }
+    #status { min-height: 30px; margin-top: 18px; color: #52636d; }
+    #result { display: none; margin-top: 18px; padding-top: 18px; border-top: 1px solid #d8e1e6; line-height: 1.7; }
+    #reply, #policy { white-space: pre-wrap; }
+    .reply-card { background: #f7fafb; border-left: 4px solid #126782; border-radius: 8px; padding: 16px; }
+    .policy-card { background: #f1f6f7; border-radius: 8px; padding: 14px; }
+    .spinner-border { width: 1rem; height: 1rem; margin-right: 8px; }
+    .badge { display: inline-block; margin-bottom: 12px; padding: 4px 9px; border-radius: 999px; background: #e2f0f4; color: #126782; font-size: 14px; font-weight: 700; }
+  </style>
+</head>
+<body>
+  <main>
+    <section class="panel">
+      <h1>Airline Customer Service AI Agent</h1>
+      <form id="chat-form">
+        <label for="message">顧客訊息</label>
+        <textarea id="message" required placeholder="例如：我的航班延誤了兩小時，請問可以申請什麼協助？"></textarea>
+        <button id="submit" type="submit">送出訊息</button>
+      </form>
+      <div id="status" role="status"></div>
+      <div id="result">
+        <div id="sentiment" class="badge"></div>
+        <div id="language" class="small text-secondary mb-3"></div>
+        <h2 class="h6">AI 回覆</h2>
+        <div id="reply" class="reply-card mb-3"></div>
+        <details>
+          <summary class="small fw-semibold">查看政策來源</summary>
+          <div id="policy" class="policy-card small text-secondary mt-2"></div>
+        </details>
+      </div>
+    </section>
+  </main>
+  <script>
+    const form = document.querySelector('#chat-form');
+    const message = document.querySelector('#message');
+    const submit = document.querySelector('#submit');
+    const status = document.querySelector('#status');
+    const result = document.querySelector('#result');
+    const sentiment = document.querySelector('#sentiment');
+    const language = document.querySelector('#language');
+    const reply = document.querySelector('#reply');
+    const policy = document.querySelector('#policy');
+
+    form.addEventListener('submit', async (event) => {
+      event.preventDefault();
+      submit.disabled = true;
+      status.innerHTML = '<span class="spinner-border" role="status" aria-hidden="true"></span>AI 正在分析訊息並查詢政策...';
+      result.style.display = 'none';
+      try {
+        const response = await fetch('/chat', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ message: message.value.trim() })
+        });
+        const data = await response.json();
+        if (!response.ok) throw new Error(data.detail || 'API request failed');
+        const sentimentIcons = { POSITIVE: '😊', NEGATIVE: '😠', NEUTRAL: '😐' };
+        sentiment.textContent = `${sentimentIcons[data.sentiment] || '😐'} 顧客情緒：${data.sentiment}`;
+        language.textContent = `偵測語言：${data.language}`;
+        reply.textContent = data.reply;
+        policy.textContent = data.policy_info;
+        result.style.display = 'block';
+        status.textContent = '';
+      } catch (error) {
+        status.textContent = `發生錯誤：${error.message}`;
+      } finally {
+        submit.disabled = false;
+      }
+    });
+  </script>
+</body>
+</html>
