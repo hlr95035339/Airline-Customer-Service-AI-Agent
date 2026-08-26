@@ -2,7 +2,7 @@
 ---
 
 ## Project Overview
-This project upgrades the classic *Airline Passenger Satisfaction Analysis* into a full AI Agent application.  
+This project upgrades the previous *Airline Passenger Satisfaction Analysis* into a full AI Agent application.  
 It combines RAG (Retrieval-Augmented Generation) with Agent workflows to build an intelligent airline customer service system.  
 The agent can:
 - Analyze customer sentiment based on historical satisfaction data
