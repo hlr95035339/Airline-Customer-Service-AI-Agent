@@ -31,8 +31,8 @@ D --> F[Policy Documents - FAISS Index]
 ## Demo Screenshots
 
 ### English Response Example
-![English Demo](images/AI_AGENT_EN2.png)
+![English Demo](AI_AGENT_EN2.png)
 
 ### Chinese Response Example
-![Chinese Demo](images/ai_agent.png)
+<img src="ai_agent.png" width="470">
 
