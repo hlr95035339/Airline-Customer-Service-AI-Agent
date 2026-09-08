@@ -1,12 +1,12 @@
 <!doctype html>
-<html lang="zh-Hant">
+<html lang="en">
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>航空公司自動客服智慧代理</title>
+  <title>Airline Customer Service AI Agent</title>
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
   <style>
-    :root { color-scheme: light; font-family: system-ui, "Microsoft JhengHei", sans-serif; }
+    :root { color-scheme: light; font-family: system-ui, "Segoe UI", sans-serif; }
     body { margin: 0; background: #eef3f6; color: #17212b; }
     main { max-width: 760px; margin: 48px auto; padding: 0 20px; }
     .panel { background: white; border: 1px solid #d8e1e6; border-radius: 12px; padding: 28px; box-shadow: 0 10px 30px #18324712; }
@@ -30,21 +30,21 @@
 <body>
   <main>
     <section class="panel">
-      <nav class="language-switch" aria-label="語言選擇"><span aria-current="page">中文</span> <a href="/en">English</a></nav>
-      <h1>航空公司自動客服智慧代理</h1>
+      <nav class="language-switch" aria-label="Language selection"><span aria-current="page">English</span> <a href="/">中文</a></nav>
+      <h1>Airline Customer Service AI Agent</h1>
       <form id="chat-form">
-        <label for="message">顧客訊息</label>
-        <textarea id="message" required placeholder="例如：我的航班延誤了兩小時，請問可以申請什麼協助？"></textarea>
-        <button id="submit" type="submit">送出訊息</button>
+        <label for="message">Customer message</label>
+        <textarea id="message" required placeholder="For example: My flight was delayed by two hours. What assistance can I request?"></textarea>
+        <button id="submit" type="submit">Send message</button>
       </form>
       <div id="status" role="status"></div>
       <div id="result">
         <div id="sentiment" class="badge"></div>
         <div id="language" class="small text-secondary mb-3"></div>
-        <h2 class="h6">AI 回覆</h2>
+        <h2 class="h6">AI response</h2>
         <div id="reply" class="reply-card mb-3"></div>
         <details>
-          <summary class="small fw-semibold">查看政策來源</summary>
+          <summary class="small fw-semibold">View policy source</summary>
           <div id="policy" class="policy-card small text-secondary mt-2"></div>
         </details>
       </div>
@@ -64,7 +64,7 @@
     form.addEventListener('submit', async (event) => {
       event.preventDefault();
       submit.disabled = true;
-      status.innerHTML = '<span class="spinner-border" role="status" aria-hidden="true"></span>AI 正在分析訊息並查詢政策...';
+      status.innerHTML = '<span class="spinner-border" role="status" aria-hidden="true"></span>AI is analyzing your message and checking the policy...';
       result.style.display = 'none';
       try {
         const response = await fetch('/chat', {
@@ -74,23 +74,16 @@
         });
         const data = await response.json();
         if (!response.ok) throw new Error(data.detail || 'API request failed');
-        const isEnglish = data.language === 'en';
         const sentimentIcons = { POSITIVE: '😊', NEGATIVE: '😠', NEUTRAL: '😐' };
-        const sentimentLabel = isEnglish ? 'Customer sentiment' : '顧客情緒';
-        const languageLabel = isEnglish ? 'Detected language' : '偵測語言';
-        const languageName = isEnglish ? 'English' : data.language === 'zh' ? '中文' : data.language;
-        const replyLabel = isEnglish ? 'AI response' : 'AI 回覆';
-        const policyLabel = isEnglish ? 'View policy source' : '查看政策來源';
-        sentiment.textContent = `${sentimentIcons[data.sentiment] || '😐'} ${sentimentLabel}: ${data.sentiment}`;
-        language.textContent = `${languageLabel}: ${languageName}`;
-        document.querySelector('#result h2').textContent = replyLabel;
-        document.querySelector('#result summary').textContent = policyLabel;
+        const languageName = data.language === 'en' ? 'English' : data.language === 'zh' ? 'Chinese' : data.language;
+        sentiment.textContent = `${sentimentIcons[data.sentiment] || '😐'} Customer sentiment: ${data.sentiment}`;
+        language.textContent = `Detected language: ${languageName}`;
         reply.textContent = data.reply;
         policy.textContent = data.policy_info;
         result.style.display = 'block';
         status.textContent = '';
       } catch (error) {
-        status.textContent = `發生錯誤：${error.message}`;
+        status.textContent = `Error: ${error.message}`;
       } finally {
         submit.disabled = false;
       }
