@@ -28,11 +28,13 @@ B --> D[RAG Knowledge Retrieval]
 B --> E[High EQ Reply Generator]
 D --> F[Policy Documents - FAISS Index]
 ```
+
 ## Demo Screenshots
 
 ### English Response Example
-<img src="aiagenten.png" width="480">
-
+<img src="en1.png" width="480">
+<img src="en2.png" width="480">
+--
 ### Chinese Response Example
-<img src="ai_agent.png" width="470">
+<img src="cn.png" width="480">
 
