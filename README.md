@@ -34,7 +34,7 @@ D --> F[Policy Documents - FAISS Index]
 ### English Response Example
 <img src="en1.png" width="480">
 <img src="en2.png" width="480">
---
+
 ### Chinese Response Example
 <img src="cn.png" width="480">
 
